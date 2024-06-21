@@ -1,41 +1,24 @@
 <?php
 
-$ch = curl_init();
+require __DIR__ . '/vendor/autoload.php';
 
-$headers = [
-    'Authorization: Bearer YOUR_TOKEN_HERE',
-    'Content-Type: application/json'
-    ];
+$client  = new GuzzleHttp\Client();
 
-$payload = json_encode([
-    'name' => 'Created from API',
-    'description' => 'an example-API created example',
-]);
+try {
+    $response = $client->request('GET',
+        'https://api.github.com/repos/guzzle/guzzle', [
+            "headers" => [
+                "Authorization" => "Bearer 1234567890abcdef",
+                "User-Agent" => "guzzle/guzzle",
+            ],
+        ]);
 
-curl_setopt_array($ch, [
-    CURLOPT_URL => "https://api.github.com/user/repos",
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_HTTPHEADER => $headers,
-    CURLOPT_USERAGENT => 'cURL',
-    CURLOPT_CUSTOMREQUEST => 'POST',
-    CURLOPT_POST => true,
-    CURLOPT_POSTFIELDS => $payload
+    echo $response->getStatusCode(), "\n"; // 200
+    echo $response->getHeaderLine('content-type'), "\n"; // 'application/json; charset=utf8'
+    echo $response->getBody(), "\n"; // '{"id": 1420053, "name": "guzzle", ...}'
 
-    ]);
+} catch (\GuzzleHttp\Exception\GuzzleException $e) {
 
-$response = curl_exec($ch);
+    echo $e->getMessage();
+}
 
-$status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-curl_close($ch);
-
-echo $status_code;
-
-$data = json_decode($response, true);
-
-echo "<pre>";
-print_r($data);
-echo "</pre>";
-
-
-?>
