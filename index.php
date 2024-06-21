@@ -1,5 +1,7 @@
 <?php
 
+use GuzzleHttp\Exception\GuzzleException;
+
 require __DIR__ . '/vendor/autoload.php';
 
 $client  = new GuzzleHttp\Client();
@@ -17,7 +19,7 @@ try {
     echo $response->getHeaderLine('content-type'), "\n"; // 'application/json; charset=utf8'
     echo $response->getBody(), "\n"; // '{"id": 1420053, "name": "guzzle", ...}'
 
-} catch (\GuzzleHttp\Exception\GuzzleException $e) {
+} catch (GuzzleException $e) {
 
     echo $e->getMessage();
 }
