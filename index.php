@@ -3,7 +3,7 @@
 $ch = curl_init();
 
 $headers = [
-    'Authorization: token YOUR_TOKEN',
+    'Authorization: Bearer YOUR_TOKEN_HERE',
     'Content-Type: application/json'
     ];
 
@@ -26,3 +26,16 @@ curl_setopt_array($ch, [
 $response = curl_exec($ch);
 
 $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+curl_close($ch);
+
+echo $status_code;
+
+$data = json_decode($response, true);
+
+echo "<pre>";
+print_r($data);
+echo "</pre>";
+
+
+?>
